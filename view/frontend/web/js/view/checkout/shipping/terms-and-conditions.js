@@ -22,7 +22,7 @@ define([
         this.isApplicable = function(){
             return self.currentShippingMethod() !== null && self.currentShippingMethod().match(self.regex) !== null;
         };
-
+        console.log('Applicable'+ this.isApplicable);
         
         quote.shippingMethod.subscribe(function (newValue) {
             console.log('Sipping method changed: ', newValue);
