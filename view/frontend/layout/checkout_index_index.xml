@@ -9,6 +9,24 @@
                             <item name="children" xsi:type="array">
                                 <item name="steps" xsi:type="array">
                                     <item name="children" xsi:type="array">
+                                        <item name="store-pickup" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="store-selector" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="shippingAdditional" xsi:type="array">
+                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                            <item name="displayArea" xsi:type="string">shippingAdditional</item>
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="terms_and_conditions" xsi:type="array">
+                                                                    <item name="sortOrder" xsi:type="string">150</item>
+                                                                    <item name="component" xsi:type="string">Zero1_ShippingTermsAndConditions/js/view/checkout/shipping/terms-and-conditions</item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
                                         <item name="shipping-step" xsi:type="array">
                                             <item name="children" xsi:type="array">
                                                 <item name="shippingAddress" xsi:type="array">
