@@ -10,6 +10,7 @@ define([
     let config = window.checkoutConfig.Zero1_ShippingTermsAndConditions;
 
     var Pattern = function(config){
+       
         var self = this;
         this.regex = new RegExp(config.pattern, config.modifiers);
         this.message = config.message;
@@ -23,6 +24,7 @@ define([
         };
         
         quote.shippingMethod.subscribe(function (newValue) {
+            
             self.isChecked(false);
             if ((newValue === true) || (newValue == null) || (quote.shippingMethod() == null)) {
                 self.currentShippingMethod(null);
@@ -35,51 +37,24 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Zero1_ShippingTermsAndConditions/checkout/shipping/terms-and-conditions'
+            template: 'Zero1_ShippingTermsAndConditions/checkout/shipping/terms-and-conditions',
         },
         currentShippingMethod: ko.observable(null),
+        buttonDisabled: ko.observable(false),
         enable: config.enable,
         patterns: [],
-        getButton: function() {
-            return $('#shipping-method-buttons-container').find('button[data-role="opc-continue"]');
-        },
-        disableNext: function() {
-            this.getButton().attr('disabled', 'disabled');
-        },
-        enableNext: function() {
-            this.getButton().removeAttr('disabled');
-        },
         initialize: function () {
             this._super();
             var self = this;
             if(!self.enable){
                 return this;
             }
-
-            var buttonLogic = function(){
-                var disableButton = false;
-                _.each(self.patterns, function(pattern){
-                    if(pattern.isApplicable() && pattern.hasCheckbox && !pattern.isChecked()){
-                        disableButton = true;
-                    }
-                })
-
-                if(disableButton){
-                    self.disableNext();
-                }else{
-                    self.enableNext();
-                }
-            }
-
-            _.each(config.patterns, function(patternConfig){
-                let pattern = new Pattern(patternConfig);
-                pattern.isChecked.subscribe(function(checked){
-                    buttonLogic();
-                })
-                self.patterns.push(pattern);
-            })
+            this.buttonDisabled.subscribe( function(value) {
+                value ? self.disableNext() : self.enableNext();
+            });
 
             quote.shippingMethod.subscribe(function (newValue) {
+                
                 if ((newValue === true) || (newValue == null) || (quote.shippingMethod() == null)) {
                     self.currentShippingMethod(null);
                     return;
@@ -89,12 +64,42 @@ define([
             }, this);
 
             self.currentShippingMethod.subscribe(function(newValue){
-                buttonLogic();
+                self.checkTC();
             });
+            _.each(config.patterns, function(patternConfig){
+                let pattern = new Pattern(patternConfig);
+                pattern.isChecked.subscribe(function(checked){
+                    self.checkTC();
+                });
+                self.patterns.push(pattern);
+            })
+            /* Not the best way, but it works */
+            /* Need a little delay to let the Instore Btn KO to enable the button on load with store select */
+            setTimeout( function() {
+                self.checkTC();
+            }, 4000);
             
-
             return this;
-        }
+        },
+        checkTC: function () {
+            var d = false;
+            _.each(this.patterns, function(pattern){
+                if(pattern.isApplicable() && pattern.hasCheckbox && !pattern.isChecked()){
+                    console.log('1 Not Complete');
+                    d = true;
+                }
+            })
+            this.buttonDisabled(d);
+        },
+        getButton: function() {
+            return $('#checkout-step-store-selector').find('button[data-role="opc-continue"]');
+        },
+        disableNext: function() {
+            this.getButton().attr('disabled', 'disabled');
+        },
+        enableNext: function() {
+            this.getButton().removeAttr('disabled');
+        },
     });
 });
 

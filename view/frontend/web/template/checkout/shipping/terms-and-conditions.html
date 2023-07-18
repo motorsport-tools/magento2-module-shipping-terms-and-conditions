@@ -6,7 +6,7 @@
     <div class="message-row">
         <div class="message" data-bind="html: pattern.message"></div>
             <!-- ko if: pattern.hasCheckbox === true -->
-        <input type="checkbox" data-bind="checked: pattern.isChecked, attr: {name: 'shipping-terms-and-conditions-' + $index()}" style="height: auto" />
+        <input type="checkbox" data-bind="checked: pattern.isChecked, attr: {name: 'shipping-terms-and-conditions-' + $index(), id: 'shipping-terms-and-conditions-' + $index()}" style="height: auto" />
         <label data-bind="text: pattern.label, attr: {for: 'shipping-terms-and-conditions-' + $index()}"></label>
     <!-- /ko -->
     </div>        
