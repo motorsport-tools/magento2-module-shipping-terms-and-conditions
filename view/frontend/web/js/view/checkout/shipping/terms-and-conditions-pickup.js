@@ -4,7 +4,8 @@ define([
     'ko',
     'uiComponent',
     'Magento_Checkout/js/model/quote',
-], function ($, _, ko, Component, quote) {
+    'Magento_InventoryInStorePickupFrontend/js/model/pickup-locations-service',
+], function ($, _, ko, Component, quote, pickupLocationsService) {
     'use strict';
 
     let config = window.checkoutConfig.Zero1_ShippingTermsAndConditions;
@@ -63,6 +64,13 @@ define([
                 this.currentShippingMethod(method);
             }, this);
 
+            pickupLocationsService.selectedLocation.subscribe(function(newValue) {
+                console.log(newValue);
+                setTimeout( function() {
+                    self.checkTC();
+                }, 4000);
+            });
+
             self.currentShippingMethod.subscribe(function(newValue){
                 self.checkTC();
             });
@@ -84,8 +92,7 @@ define([
         checkTC: function () {
             var d = false;
             _.each(this.patterns, function(pattern){
-                if(pattern.isApplicable() && pattern.hasCheckbox && !pattern.isChecked()){
-                    console.log('1 Not Complete');
+                if( ( pattern.isApplicable() && pattern.hasCheckbox && !pattern.isChecked() ) || quote.shippingAddress().postcode == null){
                     d = true;
                 }
             })
