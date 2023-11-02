@@ -2,7 +2,7 @@
     "name": "zero1/module-shipping-terms-and-conditions",
     "description": "Add a custom message to 'select shipping' step on checkout, depending on the shipping method selected. With optional confirmation checkbox",
     "type": "magento2-module",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
